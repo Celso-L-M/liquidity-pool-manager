@@ -1,0 +1,211 @@
+// Version: 4.0.0
+type AccessControlState__834003427 =
+  {
+    var adminAssigned : Bool;
+    userRoles : Map__386906547<Principal, UserRole__322780315>
+  };
+type AlertPreferences__329411790 =
+  {
+    emailDelivery : Bool;
+    impermanentLossRisk : Bool;
+    liquidityRemoved : Bool;
+    liquidityWithdrawn : Bool
+  };
+type AlertPreferences__429670500 =
+  {
+    emailDelivery : Bool;
+    impermanentLossRisk : Bool;
+    liquidityRemoved : Bool;
+    liquidityWithdrawn : Bool
+  };
+type AllocationChange__173532930 =
+  {fromPercent : Nat; poolId : PoolId__6673870; toPercent : Nat};
+type AllocationChange__890751343 =
+  {fromPercent : Nat; poolId : PoolId__218165239; toPercent : Nat};
+type Allocation__35765471 = {poolId : PoolId__218165239; targetPercent : Nat};
+type Allocation__752537411 = {poolId : PoolId__6673870; targetPercent : Nat};
+type CredentialStatus__838551446 = {#connected; #disconnected; #error : Text};
+type CredentialStatus__908837493 = {#connected; #disconnected; #error : Text};
+type Credential__269201285 =
+  {
+    apiKey : Text;
+    apiSecret : Text;
+    createdAt : Int;
+    exchange : Text;
+    id : Text;
+    status : CredentialStatus__908837493
+  };
+type Credential__996688455 =
+  {
+    apiKey : Text;
+    apiSecret : Text;
+    createdAt : Int;
+    exchange : Text;
+    id : Text;
+    status : CredentialStatus__838551446
+  };
+type Data__265875254<K, V> = {var count : Nat__58649523; kvs : [var ?(K, V)]};
+type Internal__161573640<K, V> =
+  {children : [var ?Node__430031793<K, V>]; data : Data__265875254<K, V>};
+type Leaf__1045638083<K, V> = {data : Data__265875254<K, V>};
+type List__1004628775<T> =
+  {
+    var blockIndex : Nat__58649523;
+    var blocks : [var [var ?T]];
+    var elementIndex : Nat__58649523
+  };
+type List__89170296<T> = List__1004628775<T>;
+type Map__13625999<K, V> =
+  {var root : Node__430031793<K, V>; var size : Nat__58649523};
+type Map__386906547<K, V> = Map__670138087<K, V>;
+type Map__670138087<K, V> = Map__13625999<K, V>;
+type Nat__58649523 = Nat__920180692;
+type Nat__920180692 = Nat;
+type NewActor__796449436 =
+  {
+    accessControlState : AccessControlState__834003427;
+    alertPrefs :
+      Map__386906547<UserId__647701515, AlertPreferences__329411790>;
+    allocations :
+      Map__386906547<UserId__647701515, List__89170296<Allocation__35765471>>;
+    credentials :
+      Map__386906547<UserId__647701515,
+                      Map__386906547<Text, Credential__269201285>>;
+    notifications :
+      Map__386906547<UserId__647701515,
+                      List__89170296<Notification__511295296>>;
+    pools : Map__386906547<PoolId__218165239, Pool__830877287>;
+    rebalanceHistory :
+      Map__386906547<UserId__647701515,
+                      List__89170296<RebalanceRecord__159650532>>;
+    trackedPools :
+      Map__386906547<UserId__647701515,
+                      List__89170296<TrackedPool__512343716>>
+  };
+type Node__430031793<K, V> =
+  {#internal : Internal__161573640<K, V>; #leaf : Leaf__1045638083<K, V>};
+type NotificationType__157036842 =
+  {#impermanentLossRisk; #liquidityRemoved; #liquidityWithdrawn};
+type NotificationType__908192046 =
+  {#impermanentLossRisk; #liquidityRemoved; #liquidityWithdrawn};
+type Notification__264708741 =
+  {
+    at : Timestamp__301639476;
+    id : Nat;
+    kind : NotificationType__908192046;
+    poolId : PoolId__6673870;
+    read : Bool
+  };
+type Notification__511295296 =
+  {
+    at : Timestamp__117389618;
+    id : Nat;
+    kind : NotificationType__157036842;
+    poolId : PoolId__218165239;
+    read : Bool
+  };
+type OldActor__98079402 = {};
+type PoolId__218165239 = Text;
+type PoolId__6673870 = Text;
+type Pool__830877287 =
+  {
+    apy : Float;
+    compositeScore : Float;
+    dex : Text;
+    fees24h : Float;
+    id : PoolId__218165239;
+    name : Text;
+    priceVolatility : Float;
+    tvl : Float;
+    volume24h : Float
+  };
+type Pool__904282375 =
+  {
+    apy : Float;
+    compositeScore : Float;
+    dex : Text;
+    fees24h : Float;
+    id : PoolId__6673870;
+    name : Text;
+    priceVolatility : Float;
+    tvl : Float;
+    volume24h : Float
+  };
+type RebalanceRecord__119969202 =
+  {
+    at : Timestamp__301639476;
+    changes : [AllocationChange__173532930];
+    id : Nat
+  };
+type RebalanceRecord__159650532 =
+  {
+    at : Timestamp__117389618;
+    changes : [AllocationChange__890751343];
+    id : Nat
+  };
+type Timestamp__117389618 = Int;
+type Timestamp__301639476 = Int;
+type TrackedPool__512343716 =
+  {addedAt : Timestamp__117389618; poolId : PoolId__218165239};
+type TrackedPool__753679040 =
+  {addedAt : Timestamp__301639476; poolId : PoolId__6673870};
+type UserId__158757552 = Principal;
+type UserId__647701515 = Principal;
+type UserRole__322780315 = {#admin; #guest; #user};
+type UserRole__91647283 = {#admin; #guest; #user};
+{
+  "20260902_170634" : (_old : OldActor__98079402) -> NewActor__796449436
+}
+actor  {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__386906547<Principal, UserRole__91647283>
+    };
+  stable alertPrefs :
+    {
+      var root :
+        Node__430031793<UserId__158757552, AlertPreferences__429670500>;
+      var size : Nat__58649523
+    };
+  stable allocations :
+    {
+      var root :
+        Node__430031793<UserId__158757552,
+                         List__89170296<Allocation__752537411>>;
+      var size : Nat__58649523
+    };
+  stable credentials :
+    {
+      var root :
+        Node__430031793<Principal,
+                         Map__386906547<Text, Credential__996688455>>;
+      var size : Nat__58649523
+    };
+  stable notifications :
+    {
+      var root :
+        Node__430031793<UserId__158757552,
+                         List__89170296<Notification__264708741>>;
+      var size : Nat__58649523
+    };
+  stable pools :
+    {
+      var root : Node__430031793<PoolId__6673870, Pool__904282375>;
+      var size : Nat__58649523
+    };
+  stable rebalanceHistory :
+    {
+      var root :
+        Node__430031793<UserId__158757552,
+                         List__89170296<RebalanceRecord__119969202>>;
+      var size : Nat__58649523
+    };
+  stable trackedPools :
+    {
+      var root :
+        Node__430031793<UserId__158757552,
+                         List__89170296<TrackedPool__753679040>>;
+      var size : Nat__58649523
+    }
+};

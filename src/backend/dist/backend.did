@@ -1,0 +1,197 @@
+type Value = 
+ variant {
+   "bool": bool;
+   float: float64;
+   "int": int;
+   "nat": nat;
+   "null";
+   "text": text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec HttpHeader;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: HttpRequestResult;
+ };
+type TrackedPool = 
+ record {
+   addedAt: Timestamp;
+   poolId: PoolId;
+ };
+type Timestamp = int;
+type Result__1 = 
+ variant {
+   err: Error;
+   ok;
+ };
+type Result = 
+ record {
+   hasMore: bool;
+   rows: vec vec Cell;
+ };
+type RebalanceRecord = 
+ record {
+   at: Timestamp;
+   changes: vec AllocationChange;
+   id: nat;
+ };
+type PoolId = text;
+type Pool = 
+ record {
+   apy: float64;
+   compositeScore: float64;
+   dex: text;
+   fees24h: float64;
+   id: PoolId;
+   name: text;
+   priceVolatility: float64;
+   tvl: float64;
+   volume24h: float64;
+ };
+type NotificationType = 
+ variant {
+   impermanentLossRisk;
+   liquidityRemoved;
+   liquidityWithdrawn;
+ };
+type Notification = 
+ record {
+   at: Timestamp;
+   id: nat;
+   kind: NotificationType;
+   poolId: PoolId;
+   read: bool;
+ };
+type HttpRequestResult = 
+ record {
+   body: blob;
+   headers: vec HttpHeader;
+   status: nat;
+ };
+type HttpHeader = 
+ record {
+   name: text;
+   value: text;
+ };
+type Error = 
+ variant {
+   AmbiguousAttribute: record {
+                         field: text;
+                         sources: vec text;
+                       };
+   FrontendOriginMismatch: record {
+                             expected: vec text;
+                             got: text;
+                           };
+   FrontendOriginsNotConfigured;
+   MalformedCandid;
+   MissingField: text;
+   MixedSsoSources: record {
+                      otherKeys: vec text;
+                      ssoKeys: vec text;
+                    };
+   NoAttributes;
+   Stale: record {ageNs: nat;};
+   UnknownNonce;
+   UntrustedSsoSource: record {domain: text;};
+ };
+type CredentialView = 
+ record {
+   apiKey: text;
+   createdAt: int;
+   exchange: text;
+   id: text;
+   status: CredentialStatus;
+ };
+type CredentialStatus = 
+ variant {
+   connected;
+   disconnected;
+   error: text;
+ };
+type Credential = 
+ record {
+   apiKey: text;
+   apiSecret: text;
+   createdAt: int;
+   exchange: text;
+   id: text;
+   status: CredentialStatus;
+ };
+type Cell = 
+ record {
+   name: text;
+   value: Value;
+ };
+type AllocationView = 
+ record {
+   currentPercent: nat;
+   deviation: int;
+   poolId: PoolId;
+   targetPercent: nat;
+ };
+type AllocationChange = 
+ record {
+   fromPercent: nat;
+   poolId: PoolId;
+   toPercent: nat;
+ };
+type Allocation = 
+ record {
+   poolId: PoolId;
+   targetPercent: nat;
+ };
+type AlertPreferences = 
+ record {
+   emailDelivery: bool;
+   impermanentLossRisk: bool;
+   liquidityRemoved: bool;
+   liquidityWithdrawn: bool;
+ };
+service : {
+  _initialize_access_control: () -> ();
+  _internet_identity_sign_in_finish: () -> (Result__1);
+  _internet_identity_sign_in_start: () -> (blob);
+  addCredential: (cred: Credential) -> ();
+  addTrackedPool: (poolId: PoolId) -> ();
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  checkConnection: (id: text) -> (CredentialStatus) query;
+  computeRebalance: (current: vec Allocation, targets: vec Allocation) ->
+   (vec AllocationChange) query;
+  createNotification: (kind: NotificationType, poolId: PoolId, email:
+   text) -> ();
+  execute: (qJson: text) -> (Result) query;
+  getApiDoc: () -> (text) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getCredential: (id: text) -> (opt CredentialView) query;
+  getPool: (poolId: PoolId) -> (opt Pool) query;
+  getPreferences: () -> (AlertPreferences) query;
+  isCallerAdmin: () -> (bool) query;
+  listAllocations: () -> (vec AllocationView) query;
+  listCredentials: () -> (vec CredentialView) query;
+  listNotifications: () -> (vec Notification) query;
+  listPools: () -> (vec Pool) query;
+  listRebalanceHistory: () -> (vec RebalanceRecord) query;
+  listTrackedPools: () -> (vec TrackedPool) query;
+  markAllRead: () -> ();
+  markRead: (id: nat) -> ();
+  rebalance: () -> (RebalanceRecord);
+  refreshPools: () -> ();
+  removeCredential: (id: text) -> ();
+  schema: () -> (text) query;
+  setTarget: (targets: vec Allocation) -> ();
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+  updateCredential: (cred: Credential) -> ();
+  updatePreferences: (prefs: AlertPreferences) -> ();
+}

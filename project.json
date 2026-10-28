@@ -1,0 +1,18 @@
+{
+  "overview": "A liquidity pool optimizer that ranks ICP network DEX pools and helps you manage allocations and rebalancing.",
+  "features": [
+    "Rank ICP network DEX pools by composite score",
+    "Track pools and refresh live data",
+    "Set target allocations and trigger rebalancing",
+    "Receive liquidity notifications and alerts",
+    "Manage exchange and API credentials"
+  ],
+  "category": "productivity",
+  "tags": [
+    "defi",
+    "liquidity",
+    "icp",
+    "portfolio"
+  ],
+  "last_updated": "2026-09-03T11:28:57.330Z"
+}
